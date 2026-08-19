@@ -15,13 +15,11 @@ class Tracker:
     def swap(self, tn: str) -> str:
         return tn.translate(self._KEYBOARD_SWAP)
     
-    def detect_carrier(self, tn: str) -> str | None:
+    def detect_carrier(self, tn: str) -> str:
         if tn.startswith("1Z"):
             return "UPS"
         if tn.startswith(("JD", "JJ", "0034")):
             return "DHL"
-        else:
-            return "No carrier could have been detected."
 
     def build_tracking_link(self, tn: str, used_carrier: str = None) -> str:
         clean_tn = self.fix_UPS_keyboard_layout_error(tn)
