@@ -17,11 +17,11 @@ A compact Python tool for everyday use that quickly generates tracking links and
 ## 📂 Project Structure
 
 ```text
-├── main.py              # Main program & interactive CLI loop
-├── tracker.py           # Tracker class (logic for detection & link generation)
-├── requirements.txt     # Python dependencies (e.g., pyperclip)
-├── run.bat              # Batch script for quick launch with a double-click
-└── README.md            # Documentation
+├── tests/
+│   └── test_tracker.py      # Unit tests for the Tracker class
+├── main.py                  # Main program & interactive CLI loop
+└── tracker.py               # Tracker class (logic for detection & link generation)
+
 ```
 
 ---
@@ -37,7 +37,7 @@ A compact Python tool for everyday use that quickly generates tracking links and
 
 ---
 
-## 💻 Usage & Launch Options
+## 💻 Usage
 
 There are three different ways to run the program:
 
@@ -64,8 +64,17 @@ To run the program quickly without typing in the terminal, simply double-click t
 
 ---
 
-## 🔄 Program Flow
+## 🧪 Testing
 
-1. Enter the tracking number (or press `X` to exit).
-2. The tracking link is automatically generated and copied directly to the clipboard.
-3. The corresponding email template is displayed in the console and is immediately ready to be used.
+This project uses [pytest](https://docs.pytest.org/) for unit testing.
+
+```bash
+# Install dev dependencies
+pip install pytest
+
+# Run all tests
+pytest
+
+# Run with verbose output (shows each test individually)
+pytest -v
+```
