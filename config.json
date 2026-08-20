@@ -1,0 +1,13 @@
+{
+    "carriers": {
+        "UPS": {
+            "prefix": ["1Z"],
+            "url": "https://www.ups.com/track?tracknum={}&loc=de_DE"
+        },
+        "DHL": {
+            "prefix": ["JJ", "JD", "0034"],
+            "url": "https://www.dhl.de/de/privatkunden/pakete-empfangen/verfolgen.html?piececode={}"
+        }
+    },
+    "email_template": "Dear Team,\n\nGood news: Your order has just been packed and handed over to our shipping provider.\nYou can track the delivery status of your shipment at any time using the following link:\n\n👉 {generated_link}\n\nIf you have any questions about your delivery, simply reply directly to this email.\nThank you for your purchase, and we hope you enjoy your items!"
+}

@@ -1,17 +1,13 @@
-class Tracker:
-    CARRIER_URLS = {
-        "UPS": "https://www.ups.com/track?tracknum={}&loc=de_DE",
-        "DHL": "https://www.dhl.de/de/privatkunden/pakete-empfangen/verfolgen.html?piececode={}",
-    }
+import json
 
-    EMAIL_TEMPLATE = (
-        "Dear Team,\n\n"
-        "Good news: Your order has just been packed and handed over to our shipping provider.\n"
-        "You can track the delivery status of your shipment at any time using the following link:\n\n"
-        "👉 {generated_link}\n\n"
-        "If you have any questions about your delivery, simply reply directly to this email.\n"
-        "Thank you for your purchase, and we hope you enjoy your items!"
-    )
+
+class Tracker:
+    def __init__(self, config_path="config.json"):
+        with open(config_path) as conf:
+            config = json.load(conf)
+        self.carriers = config["carriers"]
+        self.email_template = config["email_template"]
+
 
     _KEYBOARD_SWAP = str.maketrans({"Z":"Y", "Y":"Z"})
 
@@ -45,4 +41,4 @@ class Tracker:
         link = self.build_tracking_link(tn)
         if not link:
             return ""
-        return self.EMAIL_TEMPLATE.format(generated_link=link)
+        return self.email_template.format(link)
