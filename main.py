@@ -14,7 +14,7 @@ def main():
         print("💡Tip: Install 'pyperclip' (pip install pyperclip) so that links are copied automatically.")
 
     while True:
-        user_input = input("Trackingnummer: ")
+        user_input = input("Tracking-Number: ")
 
         if user_input.lower() in ["x", "exit", "quit"]:
             print("Bye!")
