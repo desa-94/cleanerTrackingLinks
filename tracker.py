@@ -1,19 +1,24 @@
 import json
 
+import logging
+logger = logging.getLogger(__name__)
 
 class Tracker:
+    _KEYBOARD_SWAP = str.maketrans({"Z":"Y", "Y":"Z"})
+
     def __init__(self, config_path="config.json"):
-        with open(config_path) as conf:
+        with open(config_path, encoding="utf-8") as conf:
             config = json.load(conf)
-        self.carriers = config["carriers"]
+
+        self.carriers = config["carriers"] 
         self.email_template = config["email_template"]
 
-
-    _KEYBOARD_SWAP = str.maketrans({"Z":"Y", "Y":"Z"})
+        logger.debug(f"Loaded config file: {config_path}.")
 
     def fix_UPS_keyboard_layout_error(self, tn: str) -> str:
         clean_tn = tn.strip().upper()
         if clean_tn.startswith("1Y"):
+            logger.debug("Keyboard fix applied: %s -> %s", tn.upper(), self.swap(clean_tn))
             return self.swap(clean_tn)
         return clean_tn
 
@@ -25,20 +30,27 @@ class Tracker:
             return "UPS"
         if tn.startswith(("JD", "JJ", "0034")):
             return "DHL"
+        logger.debug("No carrier detected for: %s", tn)
 
-    def build_tracking_link(self, tn: str, used_carrier: str = None) -> str:
+    def build_tracking_link(self, tn: str) -> str:
         clean_tn = self.fix_UPS_keyboard_layout_error(tn)
 
-        if not clean_tn:
+        if not clean_tn: 
             return ""
 
-        carrier = used_carrier.upper() if used_carrier else self.detect_carrier(clean_tn)
-        template = self.CARRIER_URLS.get(carrier)
+        carrier = self.detect_carrier(clean_tn)
+        template = self.carriers.get(carrier)
 
-        return template.format(clean_tn) if template else ""
+        if not template or "url" not in template:
+            return ""
 
-    def build_email(self, tn: str, used_carrier: str = None) -> str:
+        return template["url"].format(clean_tn)
+        
+
+    def build_email(self, tn: str) -> str:
         link = self.build_tracking_link(tn)
+
         if not link:
             return ""
+        
         return self.email_template.format(link)
