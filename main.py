@@ -56,7 +56,7 @@ def interactive_loop(tracker, link_only):
         
         if tracking_number.lower() in ["x", "exit", "quit"]:
             print("Closing Application.")
-            break  
+            break
 
         if not tracking_number:
             print("Please provide a valid tracking number!")
