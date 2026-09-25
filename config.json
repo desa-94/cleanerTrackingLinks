@@ -1,9 +1,11 @@
 {
     "carriers": {
         "UPS": {
+            "prefixes": ["1Z"],
             "url": "https://www.ups.com/track?tracknum={}&loc=de_DE"
         },
         "DHL": {
+            "prefixes": ["JD", "JJ", "0034"],
             "url": "https://www.dhl.de/de/privatkunden/pakete-empfangen/verfolgen.html?piececode={}"
         }
     },

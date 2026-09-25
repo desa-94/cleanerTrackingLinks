@@ -24,13 +24,14 @@ class Tracker:
 
     def swap(self, tn: str) -> str:
         return tn.translate(self._KEYBOARD_SWAP)
-    
+
     def detect_carrier(self, tn: str) -> str:
-        if tn.startswith("1Z"):
-            return "UPS"
-        if tn.startswith(("JD", "JJ", "0034")):
-            return "DHL"
+        for carrier, data in self.carriers.items():
+            prefixes = tuple(data.get("prefixes", []))
+            if prefixes and tn.startswith(prefixes):
+                return carrier
         logger.debug("No carrier detected for: %s", tn)
+        return None
 
     def build_tracking_link(self, tn: str) -> str:
         clean_tn = self.fix_UPS_keyboard_layout_error(tn)
@@ -45,12 +46,11 @@ class Tracker:
             return ""
 
         return template["url"].format(clean_tn)
-        
 
     def build_email(self, tn: str) -> str:
         link = self.build_tracking_link(tn)
 
         if not link:
             return ""
-        
+
         return self.email_template.format(link)
