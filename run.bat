@@ -1,3 +1,3 @@
 @echo off
-python main.py -i
+python main.py
 pause

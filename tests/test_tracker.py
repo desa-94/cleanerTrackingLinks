@@ -63,3 +63,27 @@ def test_whitespace_input(tracker):
 def test_lowercase_input(tracker):
     link = tracker.build_tracking_link("1z123")
     assert "1Z123" in link
+
+# --- Multiple tracking numbers in one email ---
+
+def test_build_email_accepts_list(tracker):
+    email = tracker.build_email(["1Z12345"])
+    assert "ups.com" in email
+    assert "1Z12345" in email
+
+def test_build_email_multiple_numbers(tracker):
+    email = tracker.build_email(["1Z111", "1Z222"])
+    assert email.count("ups.com") == 2
+    assert "1Z111" in email
+    assert "1Z222" in email
+
+def test_build_email_skips_unknown_in_list(tracker):
+    email = tracker.build_email(["1Z111", "XXXX"])
+    assert email.count("ups.com") == 1
+    assert "1Z111" in email
+
+def test_build_email_all_unknown_returns_empty(tracker):
+    assert tracker.build_email(["XXXX", "YYYY"]) == ""
+
+def test_build_email_empty_list_returns_empty(tracker):
+    assert tracker.build_email([]) == ""

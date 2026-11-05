@@ -9,5 +9,6 @@
             "url": "https://www.dhl.de/de/privatkunden/pakete-empfangen/verfolgen.html?piececode={}"
         }
     },
-    "email_template": "Dear Team,\n\nGood news: Your order has just been packed and handed over to our shipping provider.\nYou can track the delivery status of your shipment at any time using the following link:\n\n👉 {}\n\nIf you have any questions about your delivery, simply reply directly to this email.\nThank you for your purchase, and we hope you enjoy your items!"
+    "email_template": "Dear Team,\n\nYour shipment has been packed and handed over to our shipping provider.\nYou can track the delivery status at any time using the following link(s):\n\n{links}\n\nIf you have any questions about your delivery, simply reply directly to this email.\n\nBest regards",
+    "link_line": "👉 {link}"
 }

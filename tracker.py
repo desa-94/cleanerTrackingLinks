@@ -13,6 +13,7 @@ class Tracker:
 
         self.carriers = config["carriers"]
         self.email_template = config["email_template"]
+        self.link_line = config.get("link_line", "👉 {link}")
 
         logger.debug(f"Loaded config file: {config_path}.")
 
@@ -50,10 +51,18 @@ class Tracker:
 
         return template["url"].format(clean_tn)
 
-    def build_email(self, tn: str) -> str:
-        link = self.build_tracking_link(tn)
+    def build_email(self, tns) -> str:
+        # Accept a single tracking number (str) or several (list).
+        if isinstance(tns, str):
+            tns = [tns]
 
-        if not link:
+        lines = []
+        for tn in tns:
+            link = self.build_tracking_link(tn)
+            if link:
+                lines.append(self.link_line.format(link=link))
+
+        if not lines:
             return ""
 
-        return self.email_template.format(link)
+        return self.email_template.format(links="\n".join(lines))
