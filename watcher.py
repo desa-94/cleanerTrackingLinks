@@ -17,7 +17,7 @@ class ClipboardWatcher:
     for the user to press Enter.
 
     Workflow per customer:
-        1. Start watching -> prints "Warten auf Trackingnummern..."
+        1. Start watching -> prints "Waiting for tracking numbers..."
         2. Every copied value that looks like a tracking number is collected
            (duplicates are shown but not collected twice).
         3. The user presses Enter -> the watcher stops, the collected numbers
@@ -69,7 +69,7 @@ class ClipboardWatcher:
     def _handle_number(self, tn: str):
         # Duplicate -> show it, but don't collect again.
         if tn in self._seen:
-            print(f"Trackingnummer erkannt -> {tn}   (wurde bereits kopiert)")
+            print(f"Tracking number detected -> {tn}   (already copied)")
             return
 
         carrier = self.tracker.detect_carrier(tn)
@@ -79,13 +79,13 @@ class ClipboardWatcher:
             self._carrier = carrier
         elif carrier != self._carrier:
             print(
-                f"⚠️  {carrier}-Nummer erkannt, Sammlung ist aber {self._carrier} -> übersprungen: {tn}"
+                f"⚠️  {carrier} number detected, but collection is {self._carrier} -> skipped: {tn}"
             )
             return
 
         self._seen.add(tn)
         self._collected.append(tn)
-        print(f"Trackingnummer erkannt -> {tn}   ({len(self._collected)} gesammelt)")
+        print(f"Tracking number detected -> {tn}   ({len(self._collected)} collected)")
 
     def collect(self):
         """Watch until the user presses Enter. Returns the collected numbers."""
@@ -98,7 +98,7 @@ class ClipboardWatcher:
         except Exception:
             self._last_clipboard = ""
 
-        print("\nWarten auf Trackingnummern... (Enter = fertig)")
+        print("\nWaiting for tracking numbers... (Enter = done)")
 
         thread = threading.Thread(target=self._poll_loop, daemon=True)
         thread.start()

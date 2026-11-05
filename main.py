@@ -93,7 +93,7 @@ def watch_loop(tracker, link_only):
             break
 
         if not collected:
-            print("Keine Trackingnummern erfasst.")
+            print("No tracking numbers collected.")
             continue
 
         result = build_result(tracker, collected, link_only)
@@ -105,7 +105,7 @@ def watch_loop(tracker, link_only):
             pyperclip.copy(result)
             watcher.remember_written(result)
             print(
-                f"\n{len(collected)} Trackingnummer(n) zusammengefasst und in die Zwischenablage kopiert.\n"
+                f"\n{len(collected)} tracking number(s) combined and copied to the clipboard.\n"
             )
 
 

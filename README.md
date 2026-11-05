@@ -1,109 +1,101 @@
 # Tracking-Link Generator 📦
 
-Ein kleines Kommandozeilen-Tool, das ich für meine tägliche Arbeit im Versand geschrieben habe.
+A small command-line tool I built for my daily work in the mailroom.
 
-Wir (als Mailroom) verschicken für unsere Kunden versandfertige Sendungen – pro Vorgang entweder per **UPS** oder per **DHL Express**, nie gemischt. Nach der Buchung bekommen wir die Sendungsnummer(n) in unserem internen Buchungstool angezeigt. Aus diesen Nummern muss dann eine Kunden-E-Mail mit den passenden Tracking-Links entstehen. Genau das nimmt mir das Tool ab: Nummern kopieren, Enter drücken, fertiger E-Mail-Text liegt in der Zwischenablage – einfügen und absenden.
+We ship ready-to-send parcels on behalf of our customers — per order either via **UPS** or **DHL Express**, never mixed. After booking, the tracking number(s) show up in our internal tool, and a short customer email with the matching tracking links has to go out. This tool takes over that last part: copy the numbers, press Enter, and the finished email text is on the clipboard — ready to paste and send.
 
 ---
 
-## Warum das Tool? (Der Zeitgewinn)
+## Why I built it
 
-Vorher lief das bei jeder Sendung so ab:
+For every parcel the routine used to be:
 
-1. Sendungsnummer aus dem Buchungstool kopieren
-2. Überlegen, ob es UPS oder DHL ist
-3. Die richtige Tracking-Seite aufrufen bzw. den Link von Hand zusammenbauen
-4. Den Benachrichtigungstext tippen
-5. Nummer und Link einsetzen
+1. Copy the tracking number from the booking tool
+2. Figure out whether it's UPS or DHL
+3. Open the right tracking page or assemble the link by hand
+4. Type the notification text
+5. Paste in the number and the link
 
-Das sind pro Sendung schnell **1–2 Minuten** – und dabei schleichen sich Flüchtigkeitsfehler ein (klassisch: auf der deutschen QWERTZ-Tastatur wird aus `1Z…` versehentlich `1Y…`).
+That's easily **1–2 minutes per parcel** — plus the occasional slip (a classic on a German QWERTZ keyboard: `1Z…` turns into `1Y…`).
 
-Mit dem Tool bleibt davon übrig:
+With the tool it comes down to: copy the number(s), press Enter, paste the finished text. A few seconds — whether it's one parcel or five.
 
-1. Nummer(n) kopieren (Doppelklick + Strg+C)
-2. Enter drücken
-3. Fertigen Text aus der Zwischenablage einfügen
-
-Das dauert **ein paar Sekunden** – egal ob eine oder fünf Nummern. Bei zum Beispiel 30 Sendungen am Tag spare ich damit rund **30–45 Minuten täglich**, und der Text sieht jedes Mal gleich sauber aus.
-
-| | Vorher (manuell) | Mit Tool |
+| | Before (manual) | With the tool |
 |---|---|---|
-| Pro Sendung | ca. 1–2 Min | wenige Sekunden |
-| 30 Sendungen/Tag | ~45–60 Min | ~5 Min |
-| Mehrere Pakete pro Kunde | jeder Link einzeln | alle Links in einem Text |
-| Tippfehler bei der Nummer | passiert | wird automatisch korrigiert |
+| Per parcel | ~1–2 min | a few seconds |
+| ~30 parcels/day | ~45–60 min | ~5 min |
+| Several parcels, one customer | each link by hand | all links in one text |
+| Typo in the number | happens | auto-corrected |
+
+Rough estimate: around **30–45 minutes saved per day**, and the wording comes out clean and consistent every time.
 
 ---
 
-## Was es kann
+## What it does
 
-- **Zwischenablage überwachen (Watch-Modus)** – das Tool lauscht auf die Zwischenablage. Jede kopierte Sendungsnummer wird automatisch erfasst, bis ich Enter drücke.
-- **Mehrere Nummern → eine E-Mail** – bei mehreren Paketen für denselben Kunden landen alle Tracking-Links gesammelt in einem Text.
-- **Carrier automatisch erkennen** – anhand des Nummern-Präfixes wird UPS oder DHL erkannt.
-- **Carrier-Sicherheitsnetz** – da wir nie UPS und DHL mischen, merkt sich das Tool den Carrier der ersten Nummer und überspringt (mit Warnung) eine versehentlich dazwischengeratene Nummer des anderen Carriers.
-- **Doppelt-kopiert-Hinweis** – kopiere ich dieselbe Nummer zweimal, zeigt das Tool „(wurde bereits kopiert)" an und nimmt sie nicht doppelt in den Text.
-- **Tippfehler korrigieren** – das QWERTZ-Problem (`1Y…` statt `1Z…`) wird automatisch zu `1Z…` korrigiert.
-- **Direkt in der Zwischenablage** – das fertige Ergebnis landet sofort in der Zwischenablage, ich muss es nur noch einfügen.
-- **Über Datei konfigurierbar** – Carrier, Präfixe, Links und der E-Mail-Text stehen in `config.json`. Einen neuen Carrier füge ich dort hinzu, ohne Code anzufassen.
+- **Watches the clipboard.** Start the tool, then just copy tracking numbers — each one is picked up automatically until you press Enter.
+- **Combines multiple numbers into one email.** Several parcels for the same customer? All their links end up in a single text.
+- **Detects the carrier** from the number's prefix (UPS or DHL) — no manual picking.
+- **Keeps you from mixing carriers.** Since we never mix UPS and DHL, it locks onto the first carrier and skips (with a warning) any stray number from the other one.
+- **Flags duplicates.** Copy the same number twice and it shows `(already copied)` instead of adding it again.
+- **Fixes the QWERTZ typo** (`1Y…` → `1Z…`) automatically.
+- **Configurable via file.** Carriers, prefixes, URLs and the email text live in `config.json` — adding a carrier needs no code change.
 
 ---
 
-## Nutzung im Alltag
+## Everyday use
 
-Ich starte das Tool über eine Verknüpfung auf dem Desktop, die auf `run.bat` zeigt. Das öffnet direkt den **Watch-Modus**:
+I launch it from a desktop shortcut pointing at `run.bat`, which opens the default **watch mode**:
 
 ```
 === Tracking-Link Generator (Watch Mode) ===
 
-Warten auf Trackingnummern... (Enter = fertig)
-Trackingnummer erkannt -> 1Z999AA10123456784   (1 gesammelt)
-Trackingnummer erkannt -> 1Z999AA10123456785   (2 gesammelt)
-Trackingnummer erkannt -> 1Z999AA10123456784   (wurde bereits kopiert)
+Waiting for tracking numbers... (Enter = done)
+Tracking number detected -> 1Z999AA10123456784   (1 collected)
+Tracking number detected -> 1Z999AA10123456785   (2 collected)
+Tracking number detected -> 1Z999AA10123456784   (already copied)
 
-2 Trackingnummer(n) zusammengefasst und in die Zwischenablage kopiert.
+2 tracking number(s) combined and copied to the clipboard.
 
-Warten auf Trackingnummern... (Enter = fertig)
+Waiting for tracking numbers... (Enter = done)
 ```
 
-Ablauf: Tool starten → Nummer(n) im Buchungstool mit Doppelklick markieren und Strg+C → Enter → der fertige Text liegt in der Zwischenablage. Danach wartet das Tool direkt auf den nächsten Kunden. Zum Beenden `x` + Enter.
+Flow: start the tool → in the booking tool, double-click a number and Ctrl+C → press Enter → the finished text is on your clipboard. It then waits for the next customer. Type `x` + Enter to quit.
 
-### Weitere Aufrufvarianten
+### Other modes
 
-Für Sonderfälle gibt es daneben noch den manuellen und den Einmal-Modus:
+For edge cases there's also a manual and a one-shot mode:
 
 ```bash
-python main.py                      # Watch-Modus (Standard)
-python main.py -i                   # interaktiv: Nummern von Hand eintippen
-python main.py 1Z999AA10123456784   # einmalig eine Nummer verarbeiten
-python main.py 1Z999AA10123456784 -l  # nur den Link, ohne E-Mail-Text
-python main.py -i -v                # interaktiv + Debug-Ausgaben
+python main.py                       # watch mode (default)
+python main.py -i                    # interactive: type numbers by hand
+python main.py 1Z999AA10123456784    # process a single number once
+python main.py 1Z999AA10123456784 -l # link only, no email text
 ```
 
-| Flag | Kurz | Bedeutung |
-|------|------|-----------|
-| `--interactive` | `-i` | Nummern von Hand eintippen statt Zwischenablage überwachen |
-| `--link-only`   | `-l` | Nur den/die Tracking-Link(s) ausgeben, ohne E-Mail-Text |
-| `--verbose`     | `-v` | Debug-Ausgaben einschalten |
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--interactive` | `-i` | Type numbers by hand instead of watching the clipboard |
+| `--link-only`   | `-l` | Output just the tracking link(s), no email text |
+| `--verbose`     | `-v` | Enable debug logging |
 
 ---
 
 ## Installation
 
 ```bash
-# Repository klonen und hineinwechseln
 python -m venv .venv
 .venv\Scripts\activate          # Windows
-
 pip install -r requirements.txt
 ```
 
-Danach `python main.py` starten – oder `run.bat` doppelklicken.
+Then run `python main.py` — or double-click `run.bat`.
 
 ---
 
-## Konfiguration
+## Configuration
 
-Die ganze Carrier-Logik steckt in `config.json`:
+All carrier logic lives in `config.json`:
 
 ```json
 {
@@ -122,24 +114,22 @@ Die ganze Carrier-Logik steckt in `config.json`:
 }
 ```
 
-- Ein neuer Carrier braucht nur einen Eintrag mit seinen `prefixes` und einer `url`, in der `{}` als Platzhalter für die Nummer steht.
-- `email_template` enthält `{links}` als Platzhalter für den Block aller Links.
-- `link_line` ist die Vorlage für eine einzelne Link-Zeile (`{link}`). Bei mehreren Nummern wird sie je Nummer wiederholt.
-
-Kein Eingriff in den Code nötig.
+- A new carrier just needs an entry with its `prefixes` and a `url` containing `{}` as the placeholder for the number.
+- `email_template` uses `{links}` as the placeholder for the block of all links.
+- `link_line` is the template for a single link line (`{link}`), repeated per number.
 
 ---
 
-## Projektstruktur
+## Project structure
 
 ```text
 cleanerTrackingLinks/
-├── main.py           # Einstiegspunkt: CLI (argparse), Watch-/Interaktiv-/Einmal-Modus
-├── watcher.py        # ClipboardWatcher: überwacht die Zwischenablage (Threading)
-├── tracker.py        # Tracker-Klasse: Carrier-Erkennung & Link-/E-Mail-Aufbau
-├── config.json       # Carrier, Präfixe, Links, E-Mail-Vorlage
-├── requirements.txt  # Abhängigkeiten
-├── run.bat           # 1-Klick-Start (Watch-Modus)
+├── main.py           # Entry point: CLI (argparse), watch / interactive / one-shot modes
+├── watcher.py        # ClipboardWatcher: watches the clipboard (threading)
+├── tracker.py        # Tracker class: carrier detection & link/email building
+├── config.json       # Carriers, prefixes, URLs, email template
+├── requirements.txt
+├── run.bat           # 1-click launch (watch mode)
 ├── tests/
 │   └── test_tracker.py
 ├── README.md
@@ -150,15 +140,15 @@ cleanerTrackingLinks/
 
 ## Tests
 
-Die Logik der `Tracker`-Klasse ist mit [pytest](https://docs.pytest.org/) abgedeckt:
+The `Tracker` logic is covered with [pytest](https://docs.pytest.org/):
 
 ```bash
-pytest        # alle Tests
-pytest -v     # ausführlich
+pytest        # run all tests
+pytest -v     # verbose
 ```
 
 ---
 
-## Lizenz
+## License
 
-Siehe [LICENSE](LICENSE).
+See [LICENSE](LICENSE).
